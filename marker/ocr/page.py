@@ -32,7 +32,8 @@ def ocr_entire_page_tess(page, lang: str, spellchecker: Optional[SpellChecker] =
 
         # Check if OCR worked. If it didn't, return empty list
         # OCR can fail if there is a scanned blank page with some faint text impressions, for example
-        if detect_bad_ocr(full_text, spellchecker):
+        # Note: pyspellchecker doesn't support Chinese spell check yet, so if lang includes `chi`, skip this step
+        if 'chi' not in lang and detect_bad_ocr(full_text, spellchecker):
             return []
     except RuntimeError:
         return []
@@ -70,7 +71,7 @@ def ocr_entire_page_ocrmp(page, lang: str, spellchecker: Optional[SpellChecker] 
     if len(full_text) == 0:
         return []
 
-    if detect_bad_ocr(full_text, spellchecker):
+    if 'chi' not in lang and detect_bad_ocr(full_text, spellchecker):
         return []
 
     return blocks
